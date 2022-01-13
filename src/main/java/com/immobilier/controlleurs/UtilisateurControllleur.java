@@ -68,26 +68,12 @@ public class UtilisateurControllleur {
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
 	@PostMapping("/add-compte")
-	public ResponseEntity<?> ajouter(@RequestHeader Map<String, String> headers,@RequestBody Utilisateur newU) {
+	public ResponseEntity<?> ajouter(@RequestBody Utilisateur newU) {
 		
-		 String jwtToken = headers.get("authorization");
-			
-			try {
-				
-				 Utilisateur u =VerfiyTokensRoles(jwtToken,Role.ADMIN);
-				    if(u!=null)
-				    {
-				    	newU.getCompte().setMot_de_pass(bCryptPasswordEncoder.encode(u.getCompte().getMot_de_pass()));
+				    	newU.getCompte().setMot_de_pass(bCryptPasswordEncoder.encode(newU.getCompte().getMot_de_pass()));
 						return ResponseEntity.ok(dao.save(newU));
-				    }
 				    
-				    return new ResponseEntity<>( "Token not valid", HttpStatus.METHOD_NOT_ALLOWED);
-				    
-			}catch (IllegalArgumentException e) {
-				// TODO: handle exception
-				System.err.println(e);
-				 return new ResponseEntity<>( "exception in put parametre", HttpStatus.METHOD_NOT_ALLOWED);
-			}
+	
 			
 		
 
@@ -113,6 +99,7 @@ public class UtilisateurControllleur {
 	public Utilisateur modifier(@RequestHeader Map<String, String> headers,@RequestBody Utilisateur u) {
 		// TODO Auto-generated method stub
 		return dao.save(u);
+		
 	}
 
 	@GetMapping("/utilisateurs")
