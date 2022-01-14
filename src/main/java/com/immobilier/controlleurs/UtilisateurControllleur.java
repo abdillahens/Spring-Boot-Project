@@ -127,7 +127,7 @@ public class UtilisateurControllleur {
 	}
 	
 	@PostMapping("/add-annonce")
-	public ResponseEntity<?> addAnnonce(@RequestHeader Map<String, String> headers,@RequestBody Annonce annonce, @RequestParam("photos") MultipartFile multipartFile) throws IOException {
+	public ResponseEntity<?> addAnnonce(@RequestHeader Map<String, String> headers,@RequestBody Annonce annonce) throws IOException {
 		
         String jwtToken = headers.get("authorization");
 	    
@@ -136,15 +136,6 @@ public class UtilisateurControllleur {
 			 Utilisateur u =VerfiyTokensRoles(jwtToken);
 			    if(u!=null)
 			    {
-			    	
-			    	  String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
-			          //user.setPhotos(fileName);
-			   
-			          String uploadDir = "user-photos/";
-			   
-			          FileUploadUtil.saveFile(uploadDir, fileName+u.getId(), multipartFile);
-			          // annonce.setPhotos(new ArrayList<>().add(new Photo()));
-			    	//System.out.println(annonce.getLocation());
 			    	annonce.setProprietaire(u);
 					return ResponseEntity.ok(daoAnnonce.save(annonce));
 			    }
